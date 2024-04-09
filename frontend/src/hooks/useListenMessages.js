@@ -14,7 +14,7 @@ const useListenMessages = () => {
 			newMessage.shouldShake = true;
 			const sound = new Audio(notificationSound);
 			sound.play();
-            toast.success(newMessage.message.substring(0, 20))
+            toast.success(newMessage.message.substring(0, 30))
 			if (selectedConversation._id === newMessage.senderId) {
 				setMessages([...messages, newMessage]);
 			}
