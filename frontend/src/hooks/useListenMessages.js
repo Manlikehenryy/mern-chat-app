@@ -15,10 +15,12 @@ const useListenMessages = () => {
 			const sound = new Audio(notificationSound);
 			sound.play();
             toast.success(newMessage.message.substring(0, 30))
-			if (selectedConversation._id === newMessage.senderId) {
+
+			//if message came from the current open conversation
+			if (selectedConversation._id === newMessage.senderId || selectedConversation._id === newMessage?.groupId) {
 				setMessages([...messages, newMessage]);
 			}
-			
+						
 		});
 
 		return () => socket?.off("newMessage");

@@ -2,25 +2,27 @@ import { useState } from "react";
 import useConversation from "../zustand/useConversation";
 import toast from "react-hot-toast";
 
-const useSendMessage = () => {
+const useCreateGroup = () => {
 	const [loading, setLoading] = useState(false);
-	const { messages, setMessages, selectedConversation } = useConversation();
+	const { setConversations , conversations} = useConversation();
 
-	const sendMessage = async (message,messageType) => {
+	const CreateGroup = async (name,participants) => {
 		setLoading(true);
 		try {
-			const res = await fetch(`/api/messages/send/${selectedConversation._id}`, {
+			const res = await fetch(`/api/groups`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ message, messageType}),
+				body: JSON.stringify({ name, participants }),
 			});
 			const data = await res.json();
 			if (data.error) throw new Error(data.error);
 
-			console.log(data);
-			setMessages([...messages, data]);
+            setConversations([data,...conversations]);
+
+            toast.success('Group created successfully');
+			
 		} catch (error) {
 			toast.error(error.message);
 		} finally {
@@ -28,6 +30,6 @@ const useSendMessage = () => {
 		}
 	};
 
-	return { sendMessage, loading };
+	return { CreateGroup, loading };
 };
-export default useSendMessage;
+export default useCreateGroup;
